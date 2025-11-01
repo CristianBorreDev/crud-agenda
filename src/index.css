@@ -1,68 +1,146 @@
+@import "tailwindcss";
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+  /* Fondo y superficies */
+  --color-bg: #0e0f13; /* Más uniforme y profundo */
+  --color-surface: #1a1c21;
+  --color-surface-hover: #24262c;
+  
+  /* Texto */
+  --color-text: #e5e7eb;
+  --color-muted: #9ca3af;
+  
+  /* Acentos */
+  --color-accent: #10b981;
+  --color-accent-hover: #059669;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /* Estados */
+  --color-success: #22c55e;
+  --color-error: #ef4444;
+  --color-warning: #f59e0b;
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  /* Sombras suaves */
+  --shadow-soft: 0 4px 14px rgba(0, 0, 0, 0.35);
+  --shadow-hover: 0 6px 20px rgba(0, 0, 0, 0.45);
+
+  /* Gradientes */
+  --gradient-primary: linear-gradient(135deg, var(--color-accent), var(--color-accent-hover));
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+
+/* Configuración de Tailwind */
+@theme {
+  --color-bg: var(--color-bg);
+  --color-surface: var(--color-surface);
+  --color-text: var(--color-text);
+  --color-muted: var(--color-muted);
+  --color-accent: var(--color-accent);
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+.custom-calendar-theme {
+  background-color: var(--color-surface);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-soft);
+  color: var(--color-text);
+  transition: background 0.3s ease;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+.custom-calendar-theme .fc {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+.custom-calendar-theme .fc-toolbar-title {
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: var(--color-text);
+}
+
+.custom-calendar-theme .fc-button {
+  background-color: var(--color-surface-hover);
+  border: none;
+  color: var(--color-text);
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.8rem;
+  transition: background 0.2s ease, transform 0.1s ease;
+}
+
+.custom-calendar-theme .fc-button:hover {
+  background-color: var(--color-accent);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.custom-calendar-theme .fc-daygrid-day {
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-surface-hover);
+}
+
+.custom-calendar-theme .fc-daygrid-day:hover {
+  background-color: var(--color-surface-hover);
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
+.custom-calendar-theme .fc-day-today {
+  background: var(--gradient-primary);
+  color: #fff;
+  border-radius: 0.5rem;
+}
+
+.custom-calendar-theme .fc-event {
+  background-color: var(--color-accent);
+  border: none;
+  color: #fff;
+  font-weight: 500;
+  border-radius: 0.375rem;
+  padding: 0.2rem 0.4rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+}
+
+.custom-calendar-theme .fc-event:hover {
+  background-color: var(--color-accent-hover);
+}
+
+.custom-calendar-theme .fc-col-header-cell {
+  background-color: var(--color-surface);
+  color: var(--color-muted);
+  font-weight: 500;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  border-bottom: 1px solid var(--color-surface-hover);
+}
+
+.custom-calendar-theme .fc-scrollgrid {
+  border: none;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-success) #0a0a0a;
+}
+
+/* Chrome, Edge y Safari */
+::-webkit-scrollbar {
+  width: 8px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+body:hover ::-webkit-scrollbar {
+  opacity: 1;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--color-success), color-mix(in srgb, var(--color-success) 70%, #ffffff 30%));
+  border-radius: 8px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, color-mix(in srgb, var(--color-success) 60%, #ffffff 40%), color-mix(in srgb, var(--color-success) 90%, #ffffff 10%));
 }
