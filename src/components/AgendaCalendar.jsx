@@ -11,6 +11,7 @@ export default function AgendaCalendar() {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [selectedDate, setSelectedDate] = useState(null);
 
+  // --- Handlers ---
   const handleDateClick = (info) => {
     setSelectedDate(info.dateStr);
     setSelectedEvent(null);
@@ -30,6 +31,9 @@ export default function AgendaCalendar() {
     setModalOpen(false);
   };
 
+  const handleEventDelete = (id) => deleteEvent(id);
+
+  // --- Colores por fecha ---
   const getEventColor = (date) => {
     const eventDate = new Date(date);
     const today = new Date();
@@ -42,8 +46,7 @@ export default function AgendaCalendar() {
     return "#14b8a6"; // Futuro
   };
 
-  const handleEventDelete = (id) => deleteEvent(id);
-
+  // --- Generar eventos formateados para FullCalendar ---
   const calendarEvents = useMemo(
     () =>
       events.map((e) => ({
@@ -59,18 +62,18 @@ export default function AgendaCalendar() {
 
   return (
     <>
-      <div className="bg-gradient-to-br from-[var(--color-surface)] to-[var(--color-surface-hover)] rounded-3xl shadow-2xl p-6 border border-white/10 backdrop-blur-sm">
-        {/* Header Mejorado */}
-        <div className="mb-8 flex items-center justify-between">
-          <div>
-            <h2 className="text-3xl font-bold bg-gradient-to-r from-[var(--color-text)] to-[var(--color-accent)] bg-clip-text text-transparent">
+      <div>
+        {/* Header */}
+        <div className="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="text-center sm:text-left">
+            <h2 className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-[var(--color-text)] to-[var(--color-accent)] bg-clip-text text-transparent">
               Mi Agenda
             </h2>
-            <p className="text-[var(--color-muted)] mt-2">
+            <p className="text-[var(--color-muted)] text-sm sm:text-base mt-1">
               Organiza tu tiempo de forma eficiente
             </p>
           </div>
-          <div className="text-right">
+          <div className="text-center sm:text-right">
             <div className="text-2xl font-bold text-[var(--color-accent)]">
               {events.length}
             </div>
@@ -80,8 +83,8 @@ export default function AgendaCalendar() {
           </div>
         </div>
 
-        {/* Calendario Personalizado */}
-        <div className="custom-calendar-theme">
+        {/* Calendario */}
+        <div className="custom-calendar-theme rounded-2xl overflow-hidden border border-[var(--color-muted)]/10 shadow-inner bg-[var(--color-bg)]">
           <FullCalendar
             plugins={[dayGridPlugin, interactionPlugin]}
             initialView="dayGridMonth"
@@ -95,7 +98,7 @@ export default function AgendaCalendar() {
             }}
             firstDay={1}
             height="auto"
-            dayMaxEvents={3}
+            dayMaxEvents={2}
             views={{
               dayGridMonth: { dayMaxEventRows: 3 },
               dayGridWeek: { dayMaxEventRows: 6 },
@@ -103,42 +106,22 @@ export default function AgendaCalendar() {
             eventDisplay="block"
             titleFormat={{ year: "numeric", month: "long" }}
             customButtons={{
-              prev: {
-                text: "‹",
-                click: function () {
-                  // Navigate to previous month
-                },
-              },
-              next: {
-                text: "›",
-                click: function () {
-                  // Navigate to next month
-                },
-              },
+              prev: { text: "‹", click: () => {} },
+              next: { text: "›", click: () => {} },
             }}
           />
         </div>
 
-        {/* Leyenda de Eventos */}
-        <div className="mt-6 flex flex-wrap gap-4 justify-center text-xs">
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-[var(--color-error)]"></div>
-            <span className="text-[var(--color-muted)]">Hoy</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-[var(--color-warning)]"></div>
-            <span className="text-[var(--color-muted)]">Próximos 3 días</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-[var(--color-accent)]"></div>
-            <span className="text-[var(--color-muted)]">Futuro</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-3 h-3 rounded-full bg-gray-500"></div>
-            <span className="text-[var(--color-muted)]">Pasado</span>
-          </div>
+        {/* Leyenda */}
+        <div className="mt-6 flex flex-wrap gap-3 sm:gap-4 justify-center text-xs sm:text-sm">
+          <Legend color="var(--color-error)" label="Hoy" />
+          <Legend color="var(--color-warning)" label="Próximos 3 días" />
+          <Legend color="var(--color-accent)" label="Futuro" />
+          <Legend color="#6b7280" label="Pasado" />
         </div>
       </div>
+
+      {/* Modal */}
       {modalOpen && (
         <ModalAgenda
           isOpen={modalOpen}
@@ -150,5 +133,18 @@ export default function AgendaCalendar() {
         />
       )}
     </>
+  );
+}
+
+/* Pequeño componente para la leyenda */
+function Legend({ color, label }) {
+  return (
+    <div className="flex items-center gap-2">
+      <div
+        className="w-3 h-3 rounded-full shadow-sm"
+        style={{ backgroundColor: color }}
+      ></div>
+      <span className="text-[var(--color-muted)]">{label}</span>
+    </div>
   );
 }
